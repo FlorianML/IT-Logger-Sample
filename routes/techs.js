@@ -11,7 +11,6 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const techs = await Tech.find({}); //FIND ALL 
-        console.log(techs)
         res.json(techs)
     } catch (err) {
         console.error(err.message)
