@@ -57,28 +57,35 @@ router.post('/', [
 //@desc  Updates a log 
 //@access  Public
 router.put('/:id', async (req, res) => {
-    const { message, attention, tech } = req.body;
+    const { message, attention, tech, dateCreated } = req.body;
 
     //Build log object
-    const logFields = {}
-    if (message) logFields.message = message;
-    if (attention) logFields.attention = attention;
-    if (tech) logFields.tech = tech;
+    // const logFields = {}
+    // if (message) logFields.message = message;
+    // if (attention) logFields.attention = attention;
+    // if (tech) logFields.tech = tech;
+    // if (dateCreated) logFields.dateCreated = dateCreated;
 
     try {
         let log = await Log.findById(req.params.id);
 
-        console.log(log)
         if (!log) res.status(404).json({ msg: 'Log not Found' })
 
         log = await Log.findByIdAndUpdate(req.params.id,
-            { $set: logFields },
+            {
+                $set: {
+                    message,
+                    attention,
+                    tech,
+                    dateCreated
+                }
+            },
             { new: true }
         );
 
         res.json(log);
     } catch (err) {
-        console.error(error.message);
+        console.error(err.message);
         res.status(500).send('Server Error');
     }
 })
